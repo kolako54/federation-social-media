@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="max-w-[615px]">
-        <div className="aspect-w-3 aspect-h-1 bg-red-500"></div>
+        <div className="aspect-w-3 aspect-h-1 bg-neutral-50"></div>
         <div className="m-2 mx-6">
           <div className="flex">
             <div className="relative shrink-0 basis-[100px]">

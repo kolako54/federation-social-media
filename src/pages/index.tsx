@@ -5,11 +5,24 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import Image from "next/image";
 import classNames from "classnames";
-import { UserIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathRoundedSquareIcon,
+  ChatBubbleLeftIcon,
+  HeartIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
 const Home: NextPage = () => {
-  const account = api.person.getByUsername.useQuery({
+  const account = api.account.getByUsername.useQuery({
     username: "from tRPC",
   });
+  const post = api.post.getByAccountId.useQuery(
+    {
+      accountId: account.data?.id as string,
+    },
+    {
+      enabled: account.isSuccess,
+    }
+  );
 
   return (
     <>
@@ -53,7 +66,7 @@ const Home: NextPage = () => {
               />
             )}
           </div>
-          <div className="m-2 mx-6 border-b-2 border-neutral-50 pb-[0.9rem] ">
+          <div className="m-2 mx-6">
             <div className="flex">
               <div className="relative shrink-0 basis-[100px]">
                 <div
@@ -99,6 +112,7 @@ const Home: NextPage = () => {
                 &nbsp;Following
               </p>
             </div>
+
             <div className="mt-3.5 flex h-10 space-x-3.5">
               <div className="mt-3.5 flex h-10">
                 <div className="flex h-full items-center rounded-t-lg bg-red-50  px-6">
@@ -118,6 +132,79 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+            <div className=" border-b-2 border-neutral-50 pb-[0.88rem]"></div>
+            {post.data && (
+              <div className="border-b-2 border-neutral-50 px-6 py-5">
+                <div className="flex">
+                  <div className="h-[50px] w-[50px] overflow-hidden rounded-full">
+                    <Image
+                      alt="Person's avatar"
+                      src={post.data.account.avatar}
+                      width={50}
+                      height={50}
+                    />
+                  </div>
+                  <div className="ml-3.5 flex flex-col justify-center">
+                    <p>{post.data.account.name}</p>
+                    <p className="text-sm">
+                      {post.data.createdAt.toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                {post.data.attachments && (
+                  <div className="mt-3.5 grid h-[250px] grid-cols-2 grid-rows-2 gap-2">
+                    {post.data.attachments.map((attachment, i) => {
+                      return (
+                        <div
+                          className={classNames(
+                            "overflow-hidden rounded-lg shadow",
+                            {
+                              "row-span-2": i == 0,
+                            }
+                          )}
+                          key={attachment.id}
+                        >
+                          <Image
+                            className="h-full object-cover"
+                            alt={attachment.description}
+                            src={attachment.url}
+                            width={attachment.width}
+                            height={attachment.height}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {post.data.content && (
+                  <div className="mt-3.5">
+                    <p>{post.data.content}</p>
+                  </div>
+                )}
+                <div className="mt-3.5 flex justify-between">
+                  <div className="flex items-center">
+                    <ChatBubbleLeftIcon
+                      className="mr-3"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{post.data.repliesCount}</p>
+                  </div>
+                  <div className="flex items-center">
+                    <ArrowPathRoundedSquareIcon
+                      className="mr-3"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{post.data.reblogsCount}</p>
+                  </div>
+                  <div className="flex items-center">
+                    <HeartIcon className="mr-3" width={20} height={20} />
+                    <p>{post.data.favoritesCount}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -6,13 +6,13 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
-export const personRouter = createTRPCRouter({
+export const accountRouter = createTRPCRouter({
   getByUsername: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(({ input }) => {
       return {
         id: "example-id",
-        avatar: null,
+        avatar: "/avatar.png",
         header: "/header.png",
         name: "Elio Programs",
         username: "elio1234",

@@ -7,11 +7,20 @@ import {
 } from "~/server/api/trpc";
 
 export const personRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
+  getByUsername: publicProcedure
+    .input(z.object({ username: z.string() }))
     .query(({ input }) => {
       return {
-        greeting: `Hello ${input.text}`,
+        id: "example-id",
+        avatar: "/avatar.png",
+        header: "/header.png",
+        name: "Elio Programs",
+        username: "elio1234",
+        address: "elio@localhost:3000",
+        summary:
+          "Enim sunt occaecat anim quis ex proident cupidatat incididunt eiusmod.",
+        followersCount: 211,
+        followingCount: 300,
       };
     }),
 });

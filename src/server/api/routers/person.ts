@@ -12,7 +12,7 @@ export const personRouter = createTRPCRouter({
     .query(({ input }) => {
       return {
         id: "example-id",
-        avatar: "/avatar.png",
+        avatar: null,
         header: "/header.png",
         name: "Elio Programs",
         username: "elio1234",
